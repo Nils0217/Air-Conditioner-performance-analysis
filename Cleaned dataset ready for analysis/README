@@ -1,0 +1,100 @@
+# Goa AC Unit Performance — Cleaned Dataset
+
+## Overview
+Cleaned dataset derived from the [Department of Energy]
+(https://catalog.data.gov/dataset/splitsmart-an-open-dataset-for-enabling-research-in-energy-efficient-ductless-split-air-co),
+collected at Birla Institute of Technology and Science (BITS) Pilani, Goa campus.
+
+Three ductless-split AC units (A200AC01, A200AC02, A200AC03) in room A200, monitored via IoT sensors.
+
+Original data: 510,031 rows × 14 columns
+Cleaned data: metadata columns dropped, anomalies flagged/removed, Real_Power recalculated.
+
+---
+
+## File
+`Goa_A200_AC_unit_performance_clean.csv`
+
+---
+
+## Columns
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `Time_Stamp` | datetime | IoT sensor recording time (UTC) |
+| `Device_ID` | string | Unit identifier: A200AC01, A200AC02, A200AC03 |
+| `Current` | float | Electrical current (A) |
+| `voltage` | float | Supply voltage (V) |
+| `Power_Factor` | float | Power factor (0–1) |
+| `Real_Power` | float | Calculated: Current × voltage × Power_Factor (W) |
+| `room_temp` | float | Indoor temperature (°C) |
+| `External_temp` | float | Outdoor temperature (°C) |
+| `Humidity` | float | Relative humidity (%) |
+| `unit_consumption` | float | Hardware-reported rolling energy use (kWh). NaN where sensor did not report. |
+| `current_flag` | string | Current classification (see below) |
+
+### current_flag values
+| Flag | Current Range | Description |
+|------|--------------|-------------|
+| `standby` | < 5A | Compressor off, control board powered |
+| `normal` | 5 – 22A | Standard operation |
+| `high_load` | 22 – 25A | Above MCA, observed during winter peak |
+| `overload` | 25 – 35A | Within MOCP range — retained for recommendation analysis |
+| `sensor_error` | > 35A | Confirmed sensor glitch — **removed from this dataset** |
+
+---
+
+## Cleaning Summary
+
+### Current
+- Records with `current_flag == sensor_error` (> 35A) dropped
+- Confirmed isolated spikes: adjacent records show standby (~2A), no corresponding activity on other units at same timestamp
+- Records with `overload` flag (25–35A) retained for Step 5 Recommendation use
+
+### Voltage
+- 3×IQR method applied (not 1.5×IQR)
+- Low-voltage records (185–216V) retained as real grid undervoltage events for worst-case analysis
+- Extreme outliers (~107V) removed
+
+### External_temp
+- Values outside 20–35°C replaced with median of valid range
+- Goa annual climate: daily mean ~28–29°C, max ~30–34°C, min ~20°C
+- Value of 0 = sensor no-read, not real temperature
+
+### Power_Factor
+- AC01: PF = -730 → 0 (single sensor error)
+- AC02: PF = 1 or 8 → 0 (standby noise, near-zero current makes PF meaningless)
+- AC03: PF = 8 or 9 → ÷10 (decimal point dropped by sensor firmware, confirmed by surrounding records)
+- AC02 working period (15–22A): negative PF corrected by abs() — CT sensor was wired in reverse (systematic, not noise)
+- All remaining negative PF → abs()
+
+### Real_Power
+- Original dataset: all NaN
+- Recalculated: `Current × voltage × Power_Factor`
+- Calculated after all upstream cleaning complete
+
+### Columns dropped
+`_id`, `_updated`, `_created`, `_etag` — database/pipeline metadata, no analytical value.
+Note: `_updated` vs `_created` diff can be used to monitor IoT pipeline latency (left for infra team).
+
+### Columns not cleaned
+- `room_temp`: no anomalies found. Low readings (~16°C) confirmed real — AC running, compressor active.
+- `Humidity`: no cleaning applied.
+- `unit_consumption`: hardware-computed output, cannot be recalculated. NaN values not imputed — use `skipna=True` or `dropna()` in downstream analysis.
+
+---
+
+## Notes for Downstream Teams
+
+- **Step 2 / Step 3**: Use `current_flag` to filter states. Exclude `overload` unless specifically studying high-load behaviour.
+- **Step 4 (ML)**: `current_flag` can be used as a categorical feature for state classification.
+- **Step 5 (Recommendation)**: Use `overload` records to identify high-load events for efficiency recommendations.
+- `unit_consumption` NaN rate is ~36% — do not impute.
+- Float precision: 2 decimal places.
+
+---
+
+## Source
+SplitSmart: An Open Dataset for Enabling Research in Energy-Efficient Ductless-Split Air Conditioner
+Published by BITS Pilani – Goa | License: CC BY 4.0
+https://catalog.data.gov/dataset/splitsmart-an-open-dataset-for-enabling-research-in-energy-efficient-ductless-split-air-co
