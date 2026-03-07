@@ -3,7 +3,7 @@
 ## Overview
 Cleaned dataset derived from the [Department of Energy]
 (https://catalog.data.gov/dataset/splitsmart-an-open-dataset-for-enabling-research-in-energy-efficient-ductless-split-air-co),
-collected at Birla Institute of Technology and Science (BITS) Pilani, Goa campus.
+collected at Birla Institute of Technology and Science (BITS) Pilani, Goa campus from 2020-2021.
 
 Three ductless-split AC units (A200AC01, A200AC02, A200AC03) in room A200, monitored via IoT sensors.
 
