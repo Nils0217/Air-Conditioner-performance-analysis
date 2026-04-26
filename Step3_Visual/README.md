@@ -34,7 +34,7 @@ Data period: March 2020 – August 2021 | ~510K records
 ---
 
 ## Streamlit Dashboard
-**Live App:** [link here after deploy]  
+**Live App:** https://air-conditioner-performance-analysis-mjakk9w565r7rrdk5kddyl.streamlit.app/  
 **File:** `app.py`
 
 ### Page 3 — Environmental Correlation
