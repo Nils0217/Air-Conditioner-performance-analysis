@@ -22,9 +22,9 @@ The goal is to move from raw sensor readings to actionable maintenance recommend
 |------|-------|-------|--------|
 | 1 | ETL & Data Cleaning | Python, pandas | ✅ Complete |
 | 2 | Exploratory Data Analysis | Python, pandas, seaborn, MySQL | ✅ Complete |
-| 3 | BI & Visualization | Tableau / Power BI | 🔄 In Progress |
-| 4 | Predictive Modeling | scikit-learn, Google Colab | ⏳ Planned |
-| 5 | Maintenance Recommendations | — | ⏳ Planned |
+| 3 | BI & Visualization | Tableau / Power BI | ✅ Complete |
+| 4 | Predictive Modeling | scikit-learn, Google Colab | ✅ Complete|
+| 5 | Maintenance Recommendations | — | ✅ Complete |
 
 ---
 
