@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-This project analyzes four years of IoT sensor data (2019–2023) from three ductless-split AC units installed in Room A200 at BITS Pilani Goa Campus. The dataset is sourced from the open-access **SplitSmart** repository published by the Department of Energy.
+This project analyzes 1.5 years of IoT sensor data (2020–2021) from three ductless-split AC units installed in Room A200 at BITS Pilani Goa Campus. The dataset is sourced from the open-access **SplitSmart** repository published by the Department of Energy.
 
 The goal is to move from raw sensor readings to actionable maintenance recommendations — covering the full data pipeline from ETL through predictive modeling.
 
