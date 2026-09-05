@@ -132,4 +132,4 @@ Dataset            │ SplitSmart (Open Energy Information, DOE)
 ## Contact
 
 **Nils** | Data Analyst / Data Engineer  
-[LinkedIn](https://linkedin.com/in/your-profile) · [Portfolio](https://your-website.com)
+www.linkedin.com/in/nils-chen-yu-liu
